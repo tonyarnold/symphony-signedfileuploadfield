@@ -6,6 +6,14 @@ Author: Tony Arnold <tony@tonyarnold.com>
 Build Date: Wednesday, 6 May 2009
 Requirements: Symphony 2.0.2 or greater.
 
+Generates a DSA signature (based upon a key you provide) for uploaded files. I use this to generate my Sparkle appcasts. This is an initial version, and does not do any checking against the signature when downloading, and only allows one SSL signature per site.
+
+
+Requirements
+-------------------------------------------------------------------------------
+
+OpenSSL binaries must be available on the server you're running your site on.
+
 
 Installation
 -------------------------------------------------------------------------------
