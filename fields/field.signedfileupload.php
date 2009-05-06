@@ -1,6 +1,4 @@
 <?php
-	define('KEYFILE', MANIFEST . '/signedfileuploadkey.pem');
-	
 	Class fieldSignedFileUpload extends Field {
 	
 		public function __construct(&$parent){
@@ -39,7 +37,7 @@
 			} else if (preg_match('/^signature:/', $data[0])) {
 				$data[0] = str_replace('signature:', '', $data[0]);
 				$column = 'signature';
-				
+	
 			} else {
 				$column = 'file';
 			}
@@ -152,8 +150,9 @@
 			$fields['field_id'] = $id;
 			$fields['destination'] = $this->get('destination');
 			$fields['validator'] = ($fields['validator'] == 'custom' ? NULL : $this->get('validator'));
+			$fields['sslkey'] = trim($this->get('sslkey'));
 			
-			$this->_engine->Database->query("DELETE FROM `tbl_fields_".$this->handle()."` WHERE `entry_id` = '$id' LIMIT 1");		
+			$this->_engine->Database->query("DELETE FROM `tbl_fields_".$this->handle()."` WHERE `field_id` = '$id' LIMIT 1");		
 			return $this->_engine->Database->insert($fields, 'tbl_fields_' . $this->handle());
 					
 		}		
@@ -215,11 +214,15 @@
 			}
 
 			$label->appendChild(Widget::Select('fields['.$this->get('sortorder').'][destination]', $options));
-				
+			
 			if(isset($errors['destination'])) $wrapper->appendChild(Widget::wrapFormElementWithError($label, $errors['destination']));
 			else $wrapper->appendChild($label);
-			
+						
 			$this->buildValidationSelect($wrapper, $this->get('validator'), 'fields['.$this->get('sortorder').'][validator]', 'upload');
+			
+			$sslkey_label = Widget::Label(__('SSL Key'));
+            $sslkey_label->appendChild( Widget::Textarea('fields['.$this->get('sortorder').'][sslkey]', 12, 50, $this->get('sslkey'), array('class' => 'code') ));
+			$wrapper->appendChild($sslkey_label);
 			
 			$this->appendRequiredCheckbox($wrapper);
 			$this->appendShowColumnCheckbox($wrapper);
@@ -354,7 +357,7 @@
 			if(!is_array($data)) {
 				
 				$status = self::__OK__;
-				
+
 				// Do a simple reconstruction of the file meta information. This is a workaround for
 				// bug which causes all meta information to be dropped
 				return array(
@@ -395,6 +398,8 @@
 			$status = self::__OK__;
 			
 			$file = rtrim($rel_path, '/') . '/' . trim($data['name'], '/');
+			
+			$data['signature'] = self::signatureForFilename(WORKSPACE . $file);
 			
 			return array(
 				'file' => $file,
@@ -460,13 +465,15 @@
                     KEY `mimetype` (`mimetype`)
 				) TYPE=MyISAM");
 		}
-		
-		public function getSignatureKey() {
-			return @file_get_contents(KEYFILE);
-		}
 
-		public function signatureForFilename($filename) {
-			return shell_exec('openssl dgst -sha1 -binary < "'.$filename.'" | openssl dgst -dss1 -sign "'.KEYFILE.'" | openssl enc -base64');
+		function signatureForFilename($filename) {   	        
+	        $dsa_key_tmpfile_path = tempnam(TMP, 'dsakey_');
+	        $dsa_key_tmpfile = fopen($dsa_key_tmpfile_path, 'w');
+	        fwrite($dsa_key_tmpfile, $this->get('sslkey'));
+	        fseek($dsa_key_tmpfile, 0);
+			$file_signature = shell_exec('openssl dgst -sha1 -binary < "'.$filename.'" | openssl dgst -dss1 -sign "'.$dsa_key_tmpfile_path.'" | openssl enc -base64');
+			fclose($dsa_key_tmpfile);			
+			return $file_signature;
 		}
 
 		public function getExampleFormMarkup(){
@@ -477,5 +484,6 @@
 		}
 
 	}
+
 
 ?>
