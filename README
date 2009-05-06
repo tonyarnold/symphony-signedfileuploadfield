@@ -1,0 +1,21 @@
+Field: Signed File Upload
+-------------------------------------------------------------------------------
+
+Version: 1.0
+Author: Tony Arnold <tony@tonyarnold.com>
+Build Date: Wednesday, 6 May 2009
+Requirements: Symphony 2.0.2 or greater.
+
+
+Installation
+-------------------------------------------------------------------------------
+
+1. Upload the 'signeduploadfield' folder in this archive to your Symphony 'extensions' folder.
+
+2. Enable the extension by selecting the "Field: Signed File Upload", then choosing "Enable" from the with-selected menu, then click "Apply".
+
+3. If you don't already have a private key to use, I've included a simple ruby script to generate one with this extension - 'generate_keys.rb'. Use it if you need to.
+
+3. Go to the Symphony preferences and find the "Signed File Uploads: Private Key" field - paste the contents of your private key into this field and click "Save".
+
+3. You can now add the "Signed File Upload" field to your sections, and files will generate a DSA signature when uploading.
