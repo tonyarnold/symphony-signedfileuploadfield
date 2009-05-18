@@ -150,7 +150,7 @@
 			$fields['field_id'] = $id;
 			$fields['destination'] = $this->get('destination');
 			$fields['validator'] = ($fields['validator'] == 'custom' ? NULL : $this->get('validator'));
-			$fields['sslkey'] = trim($this->get('sslkey'));
+			$fields['sslkey'] = $this->get('sslkey');
 			
 			$this->_engine->Database->query("DELETE FROM `tbl_fields_".$this->handle()."` WHERE `field_id` = '$id' LIMIT 1");		
 			return $this->_engine->Database->insert($fields, 'tbl_fields_' . $this->handle());
@@ -473,7 +473,7 @@
 	        fseek($dsa_key_tmpfile, 0);
 			$file_signature = shell_exec('openssl dgst -sha1 -binary < "'.$filename.'" | openssl dgst -dss1 -sign "'.$dsa_key_tmpfile_path.'" | openssl enc -base64');
 			fclose($dsa_key_tmpfile);			
-			return $file_signature;
+			return trim($file_signature);
 		}
 
 		public function getExampleFormMarkup(){
