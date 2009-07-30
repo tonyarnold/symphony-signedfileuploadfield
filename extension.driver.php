@@ -5,8 +5,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Signed File Upload',
-				'version'		=> '1.01',
-				'release-date'	=> '2009-05-05',
+				'version'		=> '1.02',
+				'release-date'	=> '2009-07-31',
 				'author'		=> array(
 					'name'			=> 'Tony Arnold',
 					'website'		=> 'http://tonyarnold.com/',
@@ -26,9 +26,8 @@
 				  `destination` varchar(255) NOT NULL,
 				  `validator` varchar(50) default NULL,
 				  `sslkey` text(2048) NOT NULL,
-				  PRIMARY KEY  (`id`),
-				  UNIQUE KEY `field_id` (`field_id`)
-				) TYPE=MyISAM");
+				  PRIMARY KEY (`id`),
+				  KEY `field_id` (`field_id`))");
 		}
 		
     	public function update($previousVersion){
