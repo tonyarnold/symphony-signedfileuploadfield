@@ -5,8 +5,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Field: Signed File Upload',
-				'version'		=> '1.02',
-				'release-date'	=> '2009-07-31',
+				'version'		=> '1.03',
+				'release-date'	=> '2010-06-15',
 				'author'		=> array(
 					'name'			=> 'Tony Arnold',
 					'website'		=> 'http://tonyarnold.com/',
@@ -16,11 +16,11 @@
 		}
 
 		public function uninstall() {			
-			$this->_Parent->Database->query("DROP TABLE `tbl_fields_signedfileupload`");
+			Symphony::Database()->query("DROP TABLE `tbl_fields_signedfileupload`");
 		}
 
 		public function install() {
-			return $this->_Parent->Database->query("CREATE TABLE IF NOT EXISTS `tbl_fields_signedfileupload` (
+			return Symphony::Database()->query("CREATE TABLE IF NOT EXISTS `tbl_fields_signedfileupload` (
 				  `id` int(11) unsigned NOT NULL auto_increment,
 				  `field_id` int(11) unsigned NOT NULL,
 				  `destination` varchar(255) NOT NULL,
@@ -36,7 +36,7 @@
     			    unlink(MANIFEST . '/signedfileuploadkey.pem');
     			}
     			
-				$this->_Parent->Database->query("ALTER TABLE `tbl_fields_signedfileupload` ADD `sslkey` text(2048) NOT NULL");
+				Symphony::Database()->query("ALTER TABLE `tbl_fields_signedfileupload` ADD `sslkey` text(2048) NOT NULL");
 			}			
 
 			return true;

@@ -115,8 +115,8 @@
 			$fields['validator'] = ($fields['validator'] == 'custom' ? NULL : $this->get('validator'));
 			$fields['sslkey'] = $this->get('sslkey');
 			
-			$this->_engine->Database->query("DELETE FROM `tbl_fields_".$this->handle()."` WHERE `field_id` = '$id' LIMIT 1");		
-			return $this->_engine->Database->insert($fields, 'tbl_fields_' . $this->handle());
+			Symphony::Database()->query("DELETE FROM `tbl_fields_".$this->handle()."` WHERE `field_id` = '$id' LIMIT 1");		
+			return Symphony::Database()->insert($fields, 'tbl_fields_' . $this->handle());
 					
 		}		
 		
@@ -196,7 +196,7 @@
 			}
 
 			if ($entry_id) {
-    			$row = $this->Database->fetchRow(0, "SELECT * FROM `tbl_entries_data_".$this->get('id')."` WHERE `entry_id` = '$entry_id' LIMIT 1");
+    			$row = Symphony::Database()->fetchRow(0, "SELECT * FROM `tbl_entries_data_".$this->get('id')."` WHERE `entry_id` = '$entry_id' LIMIT 1");
     			$existing_file = $abs_path . '/' . basename($row['file']);
     
     			General::deleteFile($existing_file);
@@ -237,7 +237,7 @@
 		}		
 
 		function createTable() {
-			return $this->_engine->Database->query(
+			return Symphony::Database()->query(
 				"CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
                     `id` int(11) unsigned NOT NULL auto_increment,
                     `entry_id` int(11) unsigned NOT NULL,

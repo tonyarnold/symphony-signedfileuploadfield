@@ -1,10 +1,10 @@
 Field: Signed File Upload
 -------------------------------------------------------------------------------
 
-Version: 1.02
+Version: 1.03
 Author: Tony Arnold <tony@tonyarnold.com>
-Build Date: Friday, 31 July 2009
-Requirements: Symphony 2.0.2 or greater.
+Build Date: Tuesday, 15 June 2010
+Requirements: Symphony 2.0.6 or greater.
 
 Generates a DSA signature (based upon a key you provide) for uploaded files. I use this to generate my Sparkle appcasts. This is an initial version, and does not do any checking against the signature when downloading. The filename will be made unique on upload.
 
